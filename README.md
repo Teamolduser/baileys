@@ -1,50 +1,41 @@
-# CHANGE LOG FILE [ABOUT ( INFORMATION )](https://github.com/Teamolduser/baileys/blob/master/VERSION.md)
+# Baileys - Typescript/Javascript WhatsApp Web API
 
-
-## Baileys - Typescript/Javascript WhatsApp Web API
+Baileys does not require Selenium or any other browser to be interface with WhatsApp Web, it does so directly using a **WebSocket**. 
+Not running Selenium or Chromimum saves you like **half a gig** of ram :/ 
+Baileys supports interacting with the multi-device & web versions of WhatsApp.
+Thank you to [@pokearaujo](https://github.com/pokearaujo/multidevice) for writing his observations on the workings of WhatsApp Multi-Device. Also, thank you to [@Sigalor](https://github.com/sigalor/whatsapp-web-reveng) for writing his observations on the workings of WhatsApp Web and thanks to [@Rhymen](https://github.com/Rhymen/go-whatsapp/) for the __go__ implementation.
  
- Baileys does not require Selenium or any other browser to be interface with WhatsApp Web, it does so directly using a **WebSocket**. Not running Selenium or Chromimum saves you like **half a gig** of ram :/ 
+## Please Read
 
- Baileys supports interacting with the multi-device & web versions of WhatsApp.
-
- Thank you to [@pokearaujo](https://github.com/pokearaujo/multidevice) for writing his observations on the workings of WhatsApp Multi-Device. Also, thank you to [@Sigalor](https://github.com/sigalor/whatsapp-web-reveng) for writing his observations on the workings of WhatsApp Web and thanks to [@Rhymen](https://github.com/Rhymen/go-whatsapp/) for the __go__ implementation.
-
- Baileys is type-safe, extensible and simple to use. If you require more functionality than provided, it's super easy to write an extension. More on this [here](#WritingCustomFunctionality).
- 
- If you're interested in building a WhatsApp bot, you may wanna check out [WhatsAppInfoBot](https://github.com/adiwajshing/WhatsappInfoBot) and an actual bot built with it, [Messcat](https://github.com/ashokatechmin/Messcat).
- 
- **Read the docs [here](https://adiwajshing.github.io/Baileys)**
+The original repository had to be removed by the original author - we now continue development in this repository here.
+This is the only official repository and is maintained by the community.
  **Join the Discord [here](https://discord.gg/WeJM5FP9GG)**
-
+ 
 ## Example
 
-Do check out & run [example.ts](https://github.com/adiwajshing/Baileys/blob/master/Example/example.ts) to see an example usage of the library.
+Do check out & run [example.ts](
+/blob/master/Example/example.ts) to see an example usage of the library.
 The script covers most common use cases.
 To run the example script, download or clone the repo and then type the following in a terminal:
 1. ``` cd path/to/Baileys ```
 2. ``` yarn ```
-3. 
-    - ``` yarn example ``` for the multi-device edition
-    - ``` yarn example:legacy ``` for the legacy web edition
+3. ``` yarn example ```
 
 ## Install
 
 Use the stable version:
 ```
-yarn add @adiwajshing/baileys
+yarn add @whiskeysockets/baileys
 ```
 
 Use the edge version (no guarantee of stability, but latest fixes + features)
 ```
-yarn add github:adiwajshing/baileys
+yarn add github:WhiskeySockets/Baileys
 ```
 
 Then import your code using:
 ``` ts 
-// for multi-device
-import makeWASocket from '@adiwajshing/baileys'
-// for legacy web
-import {makeWALegacySocket} from '@adiwajshing/baileys'
+import makeWASocket from '@whiskeysockets/baileys'
 ```
 
 ## Unit Tests
@@ -54,7 +45,7 @@ TODO
 ## Connecting
 
 ``` ts
-import makeWASocket, { DisconnectReason } from '@adiwajshing/baileys'
+import makeWASocket, { DisconnectReason } from '@whiskeysockets/baileys'
 import { Boom } from '@hapi/boom'
 
 async function connectToWhatsApp () {
@@ -90,13 +81,7 @@ If the connection is successful, you will see a QR code printed on your terminal
 
 **Note:** install `qrcode-terminal` using `yarn add qrcode-terminal` to auto-print the QR to the terminal.
 
-## Notable Differences Between Baileys v3 & v4
-
-1. Baileys has been written from the ground up to have a more "functional" structure. This is done primarily for simplicity & more testability
-2. The Baileys event emitter will emit all events and be used to generate a source of truth for the connected user's account. Access the event emitter using (`sock.ev`)
-3. Baileys no longer maintains an internal state of chats/contacts/messages. You should ideally take this on your own, simply because your state in MD is its own source of truth & there is no one-size-fits-all way to handle the storage for this. However, a simple storage extension has been provided. This also serves as a good demonstration of how to use the Baileys event emitter to construct a source of truth.
-4. A baileys "socket" is meant to be a temporary & disposable object -- this is done to maintain simplicity & prevent bugs. I felt the entire Baileys object became too bloated as it supported too many configurations. You're encouraged to write your own implementation to handle missing functionality.
-5. Baileys does not offer an inbuilt reconnect mechanism anymore (though it's super easy to set one up with your own rules, check the example script)
+**Note:** the code to support the legacy version of WA Web (pre multi-device) has been removed in v5. Only the standard multi-device connection is now supported. This is done as WA seems to have completely dropped support for the legacy version.
 
 ## Configuring the Connection
 
@@ -105,10 +90,40 @@ You can configure the connection by passing a `SocketConfig` object.
 The entire `SocketConfig` structure is mentioned here with default values:
 ``` ts
 type SocketConfig = {
+    /** the WS url to connect to WA */
+    waWebSocketUrl: string | URL
+    /** Fails the connection if the socket times out in this interval */
+	connectTimeoutMs: number
+    /** Default timeout for queries, undefined for no timeout */
+    defaultQueryTimeoutMs: number | undefined
+    /** ping-pong interval for WS connection */
+    keepAliveIntervalMs: number
+    /** proxy agent */
+	agent?: Agent
+    /** pino logger */
+	logger: Logger
+    /** version to connect with */
+    version: WAVersion
+    /** override browser config */
+	browser: WABrowserDescription
+	/** agent used for fetch requests -- uploading/downloading media */
+	fetchAgent?: Agent
+    /** should the QR be printed in the terminal */
+    printQRInTerminal: boolean
+    /** should events be emitted for actions done by this socket connection */
+    emitOwnEvents: boolean
+    /** provide a cache to store media, so does not have to be re-uploaded */
+    mediaCache?: NodeCache
+    /** custom upload hosts to upload media to */
+    customUploadHosts: MediaConnInfo['hosts']
+    /** time to wait between sending new retry requests */
+    retryRequestDelayMs: number
+    /** time to wait for the generation of the next QR in ms */
+    qrTimeout?: number;
     /** provide an auth state object to maintain the auth state */
     auth: AuthenticationState
-    /** By default true, should history messages be downloaded and processed */
-    downloadHistory: boolean
+    /** manage history processing with this control; by default will sync up everything */
+    shouldSyncHistoryMessage: (msg: proto.Message.IHistorySyncNotification) => boolean
     /** transaction capability options for SignalKeyStore */
     transactionOpts: TransactionCapabilityOptions
     /** provide a cache to store a user's device list */
@@ -123,6 +138,16 @@ type SocketConfig = {
     linkPreviewImageThumbnailWidth: number
     /** Should Baileys ask the phone for full history, will be received async */
     syncFullHistory: boolean
+    /** Should baileys fire init queries automatically, default true */
+    fireInitQueries: boolean
+    /**
+     * generate a high quality link preview,
+     * entails uploading the jpegThumbnail to WA
+     * */
+    generateHighQualityLinkPreview: boolean
+
+    /** options for axios */
+    options: AxiosRequestConfig<any>
     /**
      * fetch a message from your store
      * implement this so that messages failed to send (solves the "this message can take a while" issue) can be retried
@@ -150,7 +175,7 @@ You obviously don't want to keep scanning the QR code every time you want to con
 
 So, you can load the credentials to log back in:
 ``` ts
-import makeWASocket, { BufferJSON, useMultiFileAuthState } from '@adiwajshing/baileys'
+import makeWASocket, { BufferJSON, useMultiFileAuthState } from '@whiskeysockets/baileys'
 import * as fs from 'fs'
 
 // utility function to help save the auth state in a single folder
@@ -193,21 +218,22 @@ type ConnectionState = {
 Baileys uses the EventEmitter syntax for events. 
 They're all nicely typed up, so you shouldn't have any issues with an Intellisense editor like VS Code.
 
-The events are typed up in a type map, as mentioned here:
+The events are typed as mentioned here:
 
 ``` ts
 
-export type BaileysEventMap<T> = {
+export type BaileysEventMap = {
     /** connection state has been updated -- WS closed, opened, connecting etc. */
 	'connection.update': Partial<ConnectionState>
     /** credentials updated -- some metadata, keys or something */
-    'creds.update': Partial<T>
-    /** set chats (history sync), chats are reverse chronologically sorted */
-    'chats.set': { chats: Chat[], isLatest: boolean }
-    /** set messages (history sync), messages are reverse chronologically sorted */
-    'messages.set': { messages: WAMessage[], isLatest: boolean }
-    /** set contacts (history sync) */
-    'contacts.set': { contacts: Contact[], isLatest: boolean }
+    'creds.update': Partial<AuthenticationCreds>
+    /** history sync, everything is reverse chronologically sorted */
+    'messaging-history.set': {
+        chats: Chat[]
+        contacts: Contact[]
+        messages: WAMessage[]
+        isLatest: boolean
+    }
     /** upsert chats */
     'chats.upsert': Chat[]
     /** update the given chats */
@@ -262,7 +288,7 @@ Baileys does not come with a defacto storage for chats, contacts, or messages. H
 It can be used as follows:
 
 ``` ts
-import makeWASocket, { makeInMemoryStore } from '@adiwajshing/baileys'
+import makeWASocket, { makeInMemoryStore } from '@whiskeysockets/baileys'
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = makeInMemoryStore({ })
@@ -294,34 +320,6 @@ The store also provides some simple functions such as `loadMessages` that utiliz
 
 **Note:** I highly recommend building your own data store especially for MD connections, as storing someone's entire chat history in memory is a terrible waste of RAM.
 
-## Using the Legacy Version
-
-The API for the legacy and MD versions has been made as similar as possible so you can switch between them seamlessly.
-
-Example on using the eg. version:
-``` ts
-import P from "pino"
-import { Boom } from "@hapi/boom"
-import { makeWALegacySocket } from '@adiwajshing/baileys'
-
-// store can be used with legacy version as well
-const store = makeInMemoryStore({ logger: P().child({ level: 'debug', stream: 'store' }) })
-
-const sock = makeWALegacySocket({
-    logger: P({ level: 'debug' }),
-    printQRInTerminal: true,
-    auth: state
-})
-// bind to the socket
-store.bind(sock.ev)
-```
-
-If you need a type representing either the legacy or MD version:
-``` ts
-// this type can have any of the socket types underneath
-import { AnyWASocket } from '@adiwajshing/baileys'
-```
-
 ## Sending Messages
 
 **Send all types of messages with a single function:**
@@ -329,7 +327,7 @@ import { AnyWASocket } from '@adiwajshing/baileys'
 ### Non-Media Messages
 
 ``` ts
-import { MessageType, MessageOptions, Mimetype } from '@adiwajshing/baileys'
+import { MessageType, MessageOptions, Mimetype } from '@whiskeysockets/baileys'
 
 const id = 'abcd@s.whatsapp.net' // the WhatsApp ID 
 // send a simple text!
@@ -447,7 +445,7 @@ Sending media (video, stickers, images) is easier & more efficient than ever.
 - When specifying a media url, Baileys never loads the entire buffer into memory; it even encrypts the media as a readable stream.
 
 ``` ts
-import { MessageType, MessageOptions, Mimetype } from '@adiwajshing/baileys'
+import { MessageType, MessageOptions, Mimetype } from '@whiskeysockets/baileys'
 // Sending gifs
 await sock.sendMessage(
     id, 
@@ -529,14 +527,14 @@ const sendMsg = await sock.sendMessage(id, templateMessage)
                                     Do not enter this field if you want to automatically generate a thumb
                                 */
         mimetype: Mimetype.pdf, /* (for media messages) specify the type of media (optional for all media types except documents),
-                                    import {Mimetype} from '@adiwajshing/baileys'
+                                    import {Mimetype} from '@whiskeysockets/baileys'
                                 */
         fileName: 'somefile.pdf', // (for media messages) file name for the media
         /* will send audio messages as voice notes, if set to true */
         ptt: true,
         /** Should it send as a disappearing messages. 
          * By default 'chat' -- which follows the setting of the chat */
-        sendEphemeral: 'chat'
+        ephemeralExpiration: WA_DEFAULT_EPHEMERAL
     }
     ```
 ## Forwarding Messages
@@ -588,7 +586,7 @@ The presence expires after about 10 seconds.
 If you want to save the media you received
 ``` ts
 import { writeFile } from 'fs/promises'
-import { downloadMediaMessage } from '@adiwajshing/baileys'
+import { downloadMediaMessage } from '@whiskeysockets/baileys'
 
 sock.ev.on('messages.upsert', async ({ messages }) => {
     const m = messages[0]
@@ -665,6 +663,24 @@ WA uses an encrypted form of communication to send chat/app updates. This has be
 
   ```
 
+- Delete a chat
+  ``` ts
+  const lastMsgInChat = await getLastMessageInChat('123456@s.whatsapp.net') // implement this on your end
+  await sock.chatModify({
+    delete: true,
+    lastMessages: [{ key: lastMsgInChat.key, messageTimestamp: lastMsgInChat.messageTimestamp }]
+  },
+  '123456@s.whatsapp.net')
+  ```
+
+- Pin/unpin a chat
+  ``` ts
+  await sock.chatModify({
+    pin: true // or `false` to unpin
+  },
+  '123456@s.whatsapp.net')
+  ```
+
 **Note:** if you mess up one of your updates, WA can log you out of all your devices and you'll have to log in again.
 
 ## Disappearing Messages
@@ -724,6 +740,11 @@ await sock.sendMessage(
     ``` ts
     const jid = '111234567890-1594482450@g.us' // can be your own too
     await sock.updateProfilePicture(jid, { url: './new-profile-picture.jpeg' })
+    ```
+- To remove your display picture or a group's
+    ``` ts
+    const jid = '111234567890-1594482450@g.us' // can be your own too
+    await sock.removeProfilePicture(jid)
     ```
 - To get someone's presence (if they're typing or online)
     ``` ts
@@ -816,7 +837,48 @@ Of course, replace ``` xyz ``` with an actual ID.
     console.log("joined to: " + response)
     ```
   Of course, replace ``` xxx ``` with invitation code.
-  
+
+## Privacy
+- To get the privacy settings
+    ``` ts
+    const privacySettings = await sock.fetchPrivacySettings(true)
+    console.log("privacy settings: " + privacySettings)
+    ```
+- To update the LastSeen privacy
+    ``` ts
+    const value = 'all' // 'contacts' | 'contact_blacklist' | 'none'
+    await sock.updateLastSeenPrivacy(value)
+    ```
+- To update the Online privacy
+    ``` ts
+    const value = 'all' // 'match_last_seen'
+    await sock.updateOnlinePrivacy(value)
+    ```
+- To update the Profile Picture privacy
+    ``` ts
+    const value = 'all' // 'contacts' | 'contact_blacklist' | 'none'
+    await sock.updateProfilePicturePrivacy(value)
+    ```
+- To update the Status privacy
+    ``` ts
+    const value = 'all' // 'contacts' | 'contact_blacklist' | 'none'
+    await sock.updateStatusPrivacy(value)
+    ```
+- To update the Read Receipts privacy
+    ``` ts
+    const value = 'all' // 'none'
+    await sock.updateReadReceiptsPrivacy(value)
+    ```
+- To update the Groups Add privacy
+    ``` ts
+    const value = 'all' // 'contacts' | 'contact_blacklist' | 'none'
+    await sock.updateGroupsAddPrivacy(value)
+    ```
+- To update the Default Disappearing Mode
+    ``` ts
+    const duration = 86400 // 604800 | 7776000 | 0 
+    await sock.updateDefaultDisappearingMode(duration)
+    ```
 ## Broadcast Lists & Stories
 
 **Note:** messages currently cannot be sent to broadcast lists from the MD version.
