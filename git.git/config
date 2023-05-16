@@ -1,0 +1,15 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/teamolduser/Baileys
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "single-auth"]
+	remote = origin
+	merge = refs/heads/single-auth
+[branch "multi-auth"]
+	remote = origin
+[branch "master"]
+	remote = origin
