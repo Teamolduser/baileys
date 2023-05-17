@@ -10,11 +10,10 @@ browser-messages.json
 browser-token.json
 decoded-ws.json
 docs
-lib
 messages*.json
 node_modules
 output.csv
 Proxy
 test.ts
 TestData
-node_modules
+wa-logs.txt
