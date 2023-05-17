@@ -4,13 +4,13 @@ import type { Logger } from 'pino';
 import { proto } from '../../WAProto';
 import type makeMDSocket from '../Socket';
 import type { BaileysEventEmitter, Chat, ConnectionState, Contact, GroupMetadata, PresenceData, WAMessage, WAMessageCursor, WAMessageKey } from '../Types';
-declare type WASocket = ReturnType<typeof makeMDSocket>;
+type WASocket = ReturnType<typeof makeMDSocket>;
 export declare const waChatKey: (pin: boolean) => {
     key: (c: Chat) => string;
     compare: (k1: string, k2: string) => number;
 };
 export declare const waMessageID: (m: WAMessage) => string;
-export declare type BaileysInMemoryStoreConfig = {
+export type BaileysInMemoryStoreConfig = {
     chatKey?: Comparable<Chat, string>;
     logger?: Logger;
 };

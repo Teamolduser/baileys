@@ -13,9 +13,9 @@ export declare const makeChatsSocket: (config: SocketConfig) => {
     }>;
     upsertMessage: (msg: proto.IWebMessageInfo, type: MessageUpsertType) => Promise<void>;
     appPatch: (patchCreate: WAPatchCreate) => Promise<void>;
-    sendPresenceUpdate: (type: WAPresence, toJid?: string | undefined) => Promise<void>;
-    presenceSubscribe: (toJid: string, tcToken?: Buffer | undefined) => Promise<void>;
-    profilePictureUrl: (jid: string, type?: 'preview' | 'image', timeoutMs?: number | undefined) => Promise<string | undefined>;
+    sendPresenceUpdate: (type: WAPresence, toJid?: string) => Promise<void>;
+    presenceSubscribe: (toJid: string, tcToken?: Buffer) => Promise<void>;
+    profilePictureUrl: (jid: string, type?: 'preview' | 'image', timeoutMs?: number) => Promise<string | undefined>;
     onWhatsApp: (...jids: string[]) => Promise<{
         exists: boolean;
         jid: string;
