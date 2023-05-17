@@ -7,7 +7,7 @@ import { Contact } from './Contact';
 import { GroupMetadata, ParticipantAction } from './GroupMetadata';
 import { MessageUpsertType, MessageUserReceiptUpdate, WAMessage, WAMessageKey, WAMessageUpdate } from './Message';
 import { ConnectionState } from './State';
-export type BaileysEventMap = {
+export declare type BaileysEventMap = {
     /** connection state has been updated -- WS closed, opened, connecting etc. */
     'connection.update': Partial<ConnectionState>;
     /** credentials updated -- some metadata, keys or something */
@@ -81,7 +81,7 @@ export type BaileysEventMap = {
     /** Receive an update on a call, including when the call was received, rejected, accepted */
     'call': WACallEvent[];
 };
-export type BufferedEventData = {
+export declare type BufferedEventData = {
     historySets: {
         chats: {
             [jid: string]: Chat;
@@ -136,7 +136,7 @@ export type BufferedEventData = {
         [jid: string]: Partial<GroupMetadata>;
     };
 };
-export type BaileysEvent = keyof BaileysEventMap;
+export declare type BaileysEvent = keyof BaileysEventMap;
 export interface BaileysEventEmitter {
     on<T extends keyof BaileysEventMap>(event: T, listener: (arg: BaileysEventMap[T]) => void): void;
     off<T extends keyof BaileysEventMap>(event: T, listener: (arg: BaileysEventMap[T]) => void): void;

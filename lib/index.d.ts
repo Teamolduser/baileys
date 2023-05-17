@@ -5,5 +5,5 @@ export * from './Types';
 export * from './Store';
 export * from './Defaults';
 export * from './WABinary';
-export type WASocket = ReturnType<typeof makeWASocket>;
+export declare type WASocket = ReturnType<typeof makeWASocket>;
 export default makeWASocket;

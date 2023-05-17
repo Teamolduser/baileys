@@ -12,7 +12,7 @@ export declare const makeGroupsSocket: (config: SocketConfig) => {
         status: string;
         jid: string;
     }[]>;
-    groupUpdateDescription: (jid: string, description?: string) => Promise<void>;
+    groupUpdateDescription: (jid: string, description?: string | undefined) => Promise<void>;
     groupInviteCode: (jid: string) => Promise<string | undefined>;
     groupRevokeInvite: (jid: string) => Promise<string | undefined>;
     groupAcceptInvite: (code: string) => Promise<string | undefined>;

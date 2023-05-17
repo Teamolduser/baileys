@@ -1,5 +1,4 @@
 /// <reference types="node" />
-/// <reference types="node" />
 import { AxiosRequestConfig } from 'axios';
 import type { Agent } from 'https';
 import type { Logger } from 'pino';
@@ -8,9 +7,9 @@ import { proto } from '../../WAProto';
 import { AuthenticationState, SignalAuthState, TransactionCapabilityOptions } from './Auth';
 import { MediaConnInfo } from './Message';
 import { SignalRepository } from './Signal';
-export type WAVersion = [number, number, number];
-export type WABrowserDescription = [string, string, string];
-export type CacheStore = {
+export declare type WAVersion = [number, number, number];
+export declare type WABrowserDescription = [string, string, string];
+export declare type CacheStore = {
     /** get a cached key and change the stats */
     get<T>(key: string): T | undefined;
     /** set a key in the cache */
@@ -20,7 +19,7 @@ export type CacheStore = {
     /** flush all data */
     flushAll(): void;
 };
-export type SocketConfig = {
+export declare type SocketConfig = {
     /** the WS url to connect to WA */
     waWebSocketUrl: string | URL;
     /** Fails the connection if the socket times out in this interval */

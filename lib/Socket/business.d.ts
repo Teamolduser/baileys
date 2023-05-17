@@ -8,7 +8,7 @@ export declare const makeBusinessSocket: (config: SocketConfig) => {
         products: import("../Types").Product[];
         nextPageCursor: string | undefined;
     }>;
-    getCollections: (jid?: string, limit?: number) => Promise<{
+    getCollections: (jid?: string | undefined, limit?: number) => Promise<{
         collections: import("../Types").CatalogCollection[];
     }>;
     productCreate: (create: ProductCreate) => Promise<import("../Types").Product>;
