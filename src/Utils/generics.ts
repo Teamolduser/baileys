@@ -20,7 +20,7 @@ export const Browsers = {
 	macOS: browser => ['OLDUSER', browser, '112.0.1'] as [string, string, string],
 	baileys: browser => ['OLDUSER', browser, '112.0.1'] as [string, string, string],
 	/** The appropriate browser based on your OS & release */
-	appropriate: browser => [ PLATFORM_MAP[platform()] || 'Ubuntu', browser, release() ] as [string, string, string]
+	appropriate: browser => [ PLATFORM_MAP[platform()] || 'OLDUSER', browser, release() ] as [string, string, string]
 }
 
 export const BufferJSON = {
