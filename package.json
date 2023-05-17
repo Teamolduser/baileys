@@ -21,10 +21,13 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
+    ".*",
+    "*",
     "lib/*",
     "WAProto/*",
     "WASignalGroup/*.js"
   ],
+  "de
   "scripts": {
     "build:all": "tsc && typedoc",
     "build:docs": "typedoc",
