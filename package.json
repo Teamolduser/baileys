@@ -1,5 +1,5 @@
 {
-  "name": "@queenanya/baileys",
+  "name": "@whiskeysockets/baileys",
   "version": "6.0.0",
   "description": "WhatsApp API",
   "keywords": [
@@ -13,14 +13,14 @@
     "multi-device"
   ],
   "homepage": "https://github.com/WhiskeySockets/Baileys",
-  "repository": "git@github.com:WhiskeySockets/Baileys.git",
+  "repository": {
+    "url": "git@github.com:WhiskeySockets/Baileys.git"
+  },
   "license": "MIT",
   "author": "Adhiraj Singh",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    ".*",
-    "*",
     "lib/*",
     "WAProto/*",
     "WASignalGroup/*.js"

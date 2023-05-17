@@ -16,9 +16,9 @@ const PLATFORM_MAP = {
 }
 
 export const Browsers = {
-	ubuntu: browser => ['OLDUSER', browser, '112.0.1'] as [string, string, string],
-	macOS: browser => ['OLDUSER', browser, '112.0.1'] as [string, string, string],
-	baileys: browser => ['OLDUSER', browser, '112.0.1'] as [string, string, string],
+	ubuntu: browser => ['Ubuntu', browser, '20.0.04'] as [string, string, string],
+	macOS: browser => ['Mac OS', browser, '10.15.7'] as [string, string, string],
+	baileys: browser => ['Baileys', browser, '4.0.0'] as [string, string, string],
 	/** The appropriate browser based on your OS & release */
 	appropriate: browser => [ PLATFORM_MAP[platform()] || 'Ubuntu', browser, release() ] as [string, string, string]
 }
@@ -226,7 +226,7 @@ export const printQRIfNecessaryListener = (ev: BaileysEventEmitter, logger: Logg
  * Use to ensure your WA connection is always on the latest version
  */
 export const fetchLatestBaileysVersion = async(options: AxiosRequestConfig<any> = { }) => {
-	const URL = 'https://github.com/Teamolduser/baileys/raw/multi-auth/lib/Defaults/baileys-version.json'
+	const URL = 'https://raw.githubusercontent.com/WhiskeySockets/Baileys/master/src/Defaults/baileys-version.json'
 	try {
 		const result = await axios.get<{ version: WAVersion }>(
 			URL,
