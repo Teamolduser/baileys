@@ -1,4 +1,4 @@
-# CHANGE LOG FILE [ABOUT ( INFORMATION )](https://github.com/Teamolduser/baileys/blob/master/VERSION.md)
+# CHANGE LOG FILE [ABOUT ( INFORMATION )](https://github.com/Teamolduser/baileys/blob/single-auth/VERSION.md)
 
 
 ## Baileys - Typescript/Javascript WhatsApp Web API
